@@ -1,34 +1,26 @@
 class Solution {
 public:
     bool checkInclusion(string s1, string s2) {
-        int low = 0;
-        bool flag = false;
+        vector<int> freq1(26,0);
+        vector<int> freq2(26,0);
 
-        unordered_map<int,int> f ,windows;
-        for(int i=0;i< s1.size();i++){
-            f[s1[i]]++;
+        for(char ch : s1){
+            freq1[ch -'a']++;
         }
+        for(int i=0;i< s2.size();i++){
+            freq2[s2[i] - 'a']++;
 
-        for(int high = 0;high<s2.size();high++){
-            
-            windows[s2[high]]++;
-
-            if( high - low + 1 > s1.size()){
-                windows[s2[low]]--;
-                
-                if(windows[s2[low]] == 0){
-                    windows.erase(s2[low]);
-                }
-                low++;
+            //windowSize exceeds the permuation string
+            if(i >= s1.size()){
+                freq2[s2[i-s1.size()] - 'a']--;
             }
-
-            if(high - low + 1 == s1.size()){
-                if(windows == f){
+            //windowSize is equal to the perm string size
+            if(i >= s1.size() - 1){
+                if(freq1 == freq2){
                     return true;
                 }
             }
         }
-        
         return false;
     }
 };
